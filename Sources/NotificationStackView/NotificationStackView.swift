@@ -1,0 +1,201 @@
+//
+//  NotificationStackView.swift
+//  NotificationStackView
+//
+//  Created by Saddam Akhtar on 6/9/20.
+//  Copyright © 2020 personal. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+public enum Position {
+    case top
+    case bottom
+}
+
+public protocol NotificationStackViewDelegate {
+    func didTap(notificationView: UIView, stackView: NotificationStackView)
+}
+
+public class NotificationStackView: UIView {
+    
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
+    
+    public var delegate: NotificationStackViewDelegate?
+    
+    public var position: Position = .top {
+        didSet {}
+    }
+    
+    public var verticalSpacing: CGFloat = 8.0 {
+        didSet {
+            stackView.spacing = verticalSpacing
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        initializeView()
+    }
+    
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initializeView()
+    }
+    
+    public override var intrinsicContentSize: CGSize {
+        stackView.setNeedsLayout()
+        stackView.layoutIfNeeded()
+        return stackView.frame.size
+    }
+    
+    public func push(view: UIView, popAfter: Double = 0) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = true
+        
+        let panRecognizer = UIPanGestureRecognizer(target:self, action:#selector(panNotificationView))
+        panRecognizer.delegate = self
+        view.addGestureRecognizer(panRecognizer)
+        
+        let tapRecognizer = UITapGestureRecognizer(target:self, action:#selector(tapNotificationView))
+        tapRecognizer.delegate = self
+        view.addGestureRecognizer(tapRecognizer)
+        
+        if popAfter > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + popAfter) {
+                self.pop(view: view)
+            }
+        }
+        
+        // Animate push
+        view.layer.opacity = 0
+        stackView.insertArrangedSubview(view, at: 0)
+        view.widthAnchor.constraint(equalTo: self.stackView.widthAnchor, multiplier: 1).isActive = true
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }){ (completed) in
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
+                view.layer.opacity = 1
+            }) { (completed) in
+                self.invalidateIntrinsicContentSize()
+            }
+        }
+    }
+    
+    public func pop(view: UIView? = nil) {
+        if let viewToBePopped = view ?? stackView.arrangedSubviews.last {
+            var poppingViewCenter = viewToBePopped.center
+            if viewToBePopped.center.x != stackView.center.x {
+                let draggedToLeft = viewToBePopped.center.x < stackView.center.x
+                if draggedToLeft {
+                    poppingViewCenter.x = -stackView.center.x
+                } else {
+                    poppingViewCenter.x = stackView.center.x * 3
+                }
+            }
+            
+            // Animate pop
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                viewToBePopped.center = poppingViewCenter
+                viewToBePopped.layer.opacity = 0
+            }) { (completed) in
+                let codeBlock = {
+                    self.stackView.removeArrangedSubview(viewToBePopped)
+                    viewToBePopped.removeFromSuperview()
+                    self.layoutIfNeeded()
+                }
+                if self.position == .bottom {
+                    // TODO - Apply animation
+                    codeBlock()
+                    self.invalidateIntrinsicContentSize()
+                } else {
+                    UIView.animate(withDuration: 0.2, animations: {
+                        codeBlock()
+                    }) { (completed) in
+                        self.invalidateIntrinsicContentSize()
+                    }
+                }
+            }
+        }
+    }
+    
+    public func popAll() {
+        var delay = 0.01
+        for view in stackView.arrangedSubviews.reversed() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                var center = view.center
+                center.x += 1.0
+                view.center = center
+                self.pop(view: view)
+            }
+            
+            delay += 0.01
+        }
+    }
+    
+    private var viewCenterBeforePan = CGPoint()
+    @objc private func panNotificationView(_ gestureRecognizer:UIPanGestureRecognizer) {
+        guard gestureRecognizer.view != nil else {return}
+        
+        let piece = gestureRecognizer.view!
+        let translation = gestureRecognizer.translation(in: piece.superview)
+        
+        if gestureRecognizer.state == .began {
+           self.viewCenterBeforePan = piece.center
+        } else if gestureRecognizer.state == .ended {
+            let centerHalfway = stackView.center.x / 2
+            if piece.center.x < centerHalfway || piece.center.x > stackView.center.x + centerHalfway {
+                self.pop(view: gestureRecognizer.view!)
+            } else {
+                UIView.animate(withDuration: 0.2) {
+                    piece.center = self.viewCenterBeforePan
+                }
+            }
+        } else if gestureRecognizer.state != .cancelled {
+            let newCenter = CGPoint(x: viewCenterBeforePan.x + translation.x,
+                                    y: viewCenterBeforePan.y)
+            piece.center = newCenter
+        } else {
+           piece.center = viewCenterBeforePan
+        }
+    }
+    
+    @objc private func tapNotificationView(_ gestureRecognizer:UITapGestureRecognizer) {
+        guard gestureRecognizer.view != nil else {return}
+        delegate?.didTap(notificationView: gestureRecognizer.view!,
+                         stackView: self)
+    }
+    
+    private func initializeView() {
+        scrollView.clipsToBounds = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        addSubview(scrollView)
+        scrollView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = verticalSpacing
+        scrollView.addSubview(stackView);
+        stackView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+    }
+}
+
+extension NotificationStackView: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                                  shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+}
