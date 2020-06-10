@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class NotificationView: UIView {
+public class NotificationView: UIView {
     
     private var contentLeftInset: NSLayoutConstraint!
     private var contentTopInset: NSLayoutConstraint!
