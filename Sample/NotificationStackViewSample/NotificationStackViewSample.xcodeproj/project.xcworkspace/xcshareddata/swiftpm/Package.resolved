@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "NotificationStackView",
+        "repositoryURL": "https://github.com/saddamakhtar88/NotificationStackView.git",
+        "state": {
+          "branch": "master",
+          "revision": "f112b12ebdab9b0d7172e73b274465a216f09ae3",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
