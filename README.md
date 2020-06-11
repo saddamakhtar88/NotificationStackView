@@ -5,7 +5,7 @@ A UIView derivative for in-app notification view
 ![](sample.gif)
 
 ## Requirements
-- iOS 9.0+
+- iOS 11.0+
 
 ## Installation
 
@@ -27,6 +27,8 @@ dependencies: [
 - func popAll()
 
 #### Properties
+- containerView: UIView?
+- containerEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 - verticalSpacing: CGFloat = 8.0
 - delegate: NotificationStackViewDelegate?
 - position: Position = .top
@@ -41,6 +43,7 @@ Standard notification view with a title and description label
 #### Properties
 - titleLabel: UILabel
 - descriptionLabel: UILabel
+- contentInset: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 
 ### NotificationStackViewDelegate protocol
 - func didTap(notificationView: UIView, stackView: NotificationStackView)

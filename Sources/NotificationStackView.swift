@@ -23,10 +23,45 @@ public class NotificationStackView: UIView {
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
     
+    private var topConstraint: NSLayoutConstraint?
+    private var bottomConstraint: NSLayoutConstraint?
+    private var leadingConstraint: NSLayoutConstraint?
+    private var trailingConstraint: NSLayoutConstraint?
+    
     public var delegate: NotificationStackViewDelegate?
     
+    public var containerView: UIView? {
+        get {
+            return superview
+        }
+        set {
+            if newValue != nil {
+                setupContainerView(containerView: newValue!)
+            } else {
+                removeFromSuperview()
+            }
+        }
+    }
+    
     public var position: Position = .top {
-        didSet {}
+        didSet {
+            if position == .bottom {
+                bottomConstraint?.isActive = true
+                topConstraint?.isActive = false
+            } else {
+                topConstraint?.isActive = true
+                bottomConstraint?.isActive = false
+            }
+        }
+    }
+    
+    public var containerEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8) {
+        didSet {
+            leadingConstraint?.constant = containerEdgeInsets.left
+            topConstraint?.constant = containerEdgeInsets.top
+            trailingConstraint?.constant = -containerEdgeInsets.right
+            bottomConstraint?.constant = -containerEdgeInsets.bottom
+        }
     }
     
     public var verticalSpacing: CGFloat = 8.0 {
@@ -34,6 +69,11 @@ public class NotificationStackView: UIView {
             stackView.spacing = verticalSpacing
             invalidateIntrinsicContentSize()
         }
+    }
+    
+    public init() {
+        super.init(frame: CGRect.zero)
+        initializeView()
     }
     
     public override init(frame: CGRect) {
@@ -53,6 +93,7 @@ public class NotificationStackView: UIView {
     }
     
     public func push(view: UIView, popAfter: Double = 0) {
+        containerView?.bringSubviewToFront(self)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isUserInteractionEnabled = true
         
@@ -170,7 +211,43 @@ public class NotificationStackView: UIView {
                          stackView: self)
     }
     
+    private func setupContainerView(containerView: UIView) {
+        guard containerView != superview else {
+            return
+        }
+        
+        removeFromSuperview()
+        containerView.addSubview(self)
+        
+        leadingConstraint = leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                     constant: containerEdgeInsets.left)
+        leadingConstraint!.isActive = true
+        
+        trailingConstraint = trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                       constant: -containerEdgeInsets.right)
+        trailingConstraint!.isActive = true
+        
+        heightAnchor.constraint(lessThanOrEqualTo: containerView.heightAnchor, multiplier: 1).isActive = true
+        
+        let guide = containerView.safeAreaLayoutGuide
+        topConstraint = topAnchor.constraint(equalTo: guide.topAnchor,
+                                             constant: containerEdgeInsets.top)
+        bottomConstraint = bottomAnchor.constraint(equalTo: guide.bottomAnchor,
+                                                   constant: -containerEdgeInsets.bottom)
+        
+        if position == .top {
+            topConstraint!.isActive = true
+        } else {
+            bottomConstraint!.isActive = true
+        }
+        
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+    
     private func initializeView() {
+        translatesAutoresizingMaskIntoConstraints = false
+        setContentCompressionResistancePriority(.required, for: .vertical)
         scrollView.clipsToBounds = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = false
