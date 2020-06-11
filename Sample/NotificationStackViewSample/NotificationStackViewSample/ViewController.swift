@@ -11,10 +11,13 @@ import NotificationStackView
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var notificationStackView: NotificationStackView!
+    var notificationStackView: NotificationStackView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        notificationStackView = NotificationStackView()
+        notificationStackView.containerEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        notificationStackView.containerView = self.view // Or UIApplication.shared.windows[index] (current window)
         notificationStackView.delegate = self
     }
     @IBAction func onStandardTap(_ sender: UIButton) {

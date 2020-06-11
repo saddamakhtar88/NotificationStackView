@@ -15,10 +15,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="330" translatesAutoresizingMaskIntoConstraints="NO" id="PPj-PL-7Nv" customClass="NotificationStackView" customModule="NotificationStackView">
-                                <rect key="frame" x="16" y="44" width="382" height="330"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28v-Gv-gwD">
                                 <rect key="frame" x="156.5" y="762" width="101" height="30"/>
                                 <state key="normal" title="Push Standard"/>
@@ -44,21 +40,14 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="geq-90-07C" firstAttribute="top" secondItem="28v-Gv-gwD" secondAttribute="bottom" constant="16" id="G31-MT-31Q"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PPj-PL-7Nv" secondAttribute="trailing" constant="16" id="RsB-J9-1cC"/>
-                            <constraint firstItem="PPj-PL-7Nv" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="d64-bZ-2rI"/>
                             <constraint firstItem="D2A-sK-tzx" firstAttribute="centerX" secondItem="28v-Gv-gwD" secondAttribute="centerX" id="d6I-dI-awa"/>
-                            <constraint firstItem="PPj-PL-7Nv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="es6-UB-Aq6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="geq-90-07C" secondAttribute="bottom" constant="24" id="fRb-fc-ifL"/>
                             <constraint firstItem="28v-Gv-gwD" firstAttribute="top" secondItem="D2A-sK-tzx" secondAttribute="bottom" constant="16" id="fUK-3e-xUh"/>
-                            <constraint firstItem="PPj-PL-7Nv" firstAttribute="height" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="height" constant="-40" id="hLg-a3-LMt"/>
                             <constraint firstItem="28v-Gv-gwD" firstAttribute="centerX" secondItem="geq-90-07C" secondAttribute="centerX" id="i5a-rY-vTZ"/>
                             <constraint firstItem="geq-90-07C" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="lb4-tj-HB4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <connections>
-                        <outlet property="notificationStackView" destination="PPj-PL-7Nv" id="PCY-dV-Oxp"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
