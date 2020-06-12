@@ -111,15 +111,24 @@ public class NotificationStackView: UIView {
             }
         }
         
-        // Animate push
         view.layer.opacity = 0
-        stackView.insertArrangedSubview(view, at: 0)
+        if position == .top {
+            stackView.insertArrangedSubview(view, at: 0)
+        } else  {
+            var viewFrame = view.frame
+            viewFrame.origin.y = stackView.frame.height
+            view.frame = viewFrame
+            stackView.addArrangedSubview(view)
+        }
+        
         view.widthAnchor.constraint(equalTo: self.stackView.widthAnchor, multiplier: 1).isActive = true
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
+        self.invalidateIntrinsicContentSize()
+        
+        UIView.animate(withDuration: 0.2, animations: {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }){ (completed) in
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 view.layer.opacity = 1
             }) { (completed) in
                 self.invalidateIntrinsicContentSize()
@@ -128,7 +137,8 @@ public class NotificationStackView: UIView {
     }
     
     public func pop(view: UIView? = nil) {
-        if let viewToBePopped = view ?? stackView.arrangedSubviews.last {
+        let viewToBePopped = view ?? (position == Position.top ? stackView.arrangedSubviews.last : stackView.arrangedSubviews.first)
+        if let viewToBePopped = viewToBePopped {
             var poppingViewCenter = viewToBePopped.center
             if viewToBePopped.center.x != stackView.center.x {
                 let draggedToLeft = viewToBePopped.center.x < stackView.center.x
@@ -139,14 +149,14 @@ public class NotificationStackView: UIView {
                 }
             }
             
-            // Animate pop
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 viewToBePopped.center = poppingViewCenter
                 viewToBePopped.layer.opacity = 0
             }) { (completed) in
                 let codeBlock = {
                     self.stackView.removeArrangedSubview(viewToBePopped)
                     viewToBePopped.removeFromSuperview()
+                    self.setNeedsLayout()
                     self.layoutIfNeeded()
                 }
                 if self.position == .bottom {
