@@ -175,16 +175,13 @@ public class NotificationStackView: UIView {
     }
     
     public func popAll() {
-        var delay = 0.01
-        for view in stackView.arrangedSubviews.reversed() {
+        var delay = 0.02
+        let views = position == .top ? stackView.arrangedSubviews.reversed() : stackView.arrangedSubviews
+        for view in views {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                var center = view.center
-                center.x += 1.0
-                view.center = center
                 self.pop(view: view)
             }
-            
-            delay += 0.01
+            delay += 0.02
         }
     }
     
