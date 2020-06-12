@@ -17,6 +17,8 @@ dependencies: [
     .package(url: "https://github.com/saddamakhtar88/NotificationStackView.git", .upToNextMajor(from: "1.0.0"))
 ]
 
+Refer sample app for integration and usage
+
 ## Public APIs
 
 ### NotificationStackView class

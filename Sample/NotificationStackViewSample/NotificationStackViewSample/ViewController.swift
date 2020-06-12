@@ -11,30 +11,55 @@ import NotificationStackView
 
 class ViewController: UIViewController {
 
-    var notificationStackView: NotificationStackView!
+    var topNotificationStackView: NotificationStackView!
+    var bottomNotificationStackView: NotificationStackView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        notificationStackView = NotificationStackView()
-        notificationStackView.containerEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        notificationStackView.containerView = self.view // Or UIApplication.shared.windows[index] (current window)
-        notificationStackView.delegate = self
-    }
-    @IBAction func onStandardTap(_ sender: UIButton) {
-        let notificationView = NotificationView(title: "Title", description: "description")
-        notificationStackView.push(view: notificationView)
+        
+        // Top Stack
+        topNotificationStackView = NotificationStackView()
+        topNotificationStackView.containerEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        topNotificationStackView.containerView = self.view // Or UIApplication.shared.windows[index] (current window)
+        topNotificationStackView.delegate = self
+        
+        // Bottom Stack
+        bottomNotificationStackView = NotificationStackView()
+        bottomNotificationStackView.containerView = self.view
+        bottomNotificationStackView.containerEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        bottomNotificationStackView.position = .bottom
+        bottomNotificationStackView.delegate = self
     }
     
-    @IBAction func onCustomTap(_ sender: Any) {
+    @IBAction func onTopStandardTap(_ sender: UIButton) {
+        let notificationView = NotificationView(title: "Top Notification !!!", description: "I am on the top.... Top of the world :)")
+        topNotificationStackView.push(view: notificationView)
+    }
+    
+    @IBAction func onTopCustomTap(_ sender: Any) {
         let view = UIView()
         view.heightAnchor.constraint(equalToConstant: 50).isActive = true
         view.backgroundColor = UIColor.brown
         view.layer.cornerRadius = 4.0
-        notificationStackView.push(view: view)
+        topNotificationStackView.push(view: view)
+    }
+    
+    @IBAction func onBottomStandardTap(_ sender: UIButton) {
+        let notificationView = NotificationView(title: "Bottom Notification !!!", description: "I am on the bottom.... I am not liking it.... :(")
+        bottomNotificationStackView.push(view: notificationView)
+    }
+    
+    @IBAction func onBottomCustomTap(_ sender: Any) {
+        let view = UIView()
+        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        view.backgroundColor = UIColor.brown
+        view.layer.cornerRadius = 4.0
+        bottomNotificationStackView.push(view: view)
     }
     
     @IBAction func onPopAllTap(_ sender: Any) {
-        notificationStackView.popAll()
+        topNotificationStackView.popAll()
+        bottomNotificationStackView.popAll()
     }
 }
 

@@ -15,36 +15,54 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28v-Gv-gwD">
-                                <rect key="frame" x="156.5" y="762" width="101" height="30"/>
-                                <state key="normal" title="Push Standard"/>
-                                <connections>
-                                    <action selector="onStandardTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bJU-sd-fwb"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="geq-90-07C">
-                                <rect key="frame" x="161" y="808" width="92" height="30"/>
+                                <rect key="frame" x="101" y="387" width="92" height="30"/>
                                 <state key="normal" title="Push Custom"/>
                                 <connections>
-                                    <action selector="onCustomTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lCN-D8-gfY"/>
+                                    <action selector="onTopCustomTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="G84-hX-5oA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F8j-2X-SLG">
+                                <rect key="frame" x="216.5" y="387" width="101" height="30"/>
+                                <state key="normal" title="Push Standard"/>
+                                <connections>
+                                    <action selector="onTopStandardTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Hc-Z7-iNl"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D2A-sK-tzx">
-                                <rect key="frame" x="183" y="716" width="48" height="30"/>
+                                <rect key="frame" x="183" y="433" width="48" height="30"/>
                                 <state key="normal" title="Pop All"/>
                                 <connections>
                                     <action selector="onPopAllTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="v9K-ST-p1R"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28v-Gv-gwD">
+                                <rect key="frame" x="101" y="479" width="92" height="30"/>
+                                <state key="normal" title="Push Custom"/>
+                                <connections>
+                                    <action selector="onBottomCustomTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7vM-lS-h6p"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fY9-In-yoF">
+                                <rect key="frame" x="216.5" y="479" width="101" height="30"/>
+                                <state key="normal" title="Push Standard"/>
+                                <connections>
+                                    <action selector="onBottomStandardTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Y1K-Q1-Coh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="geq-90-07C" firstAttribute="top" secondItem="28v-Gv-gwD" secondAttribute="bottom" constant="16" id="G31-MT-31Q"/>
-                            <constraint firstItem="D2A-sK-tzx" firstAttribute="centerX" secondItem="28v-Gv-gwD" secondAttribute="centerX" id="d6I-dI-awa"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="geq-90-07C" secondAttribute="bottom" constant="24" id="fRb-fc-ifL"/>
-                            <constraint firstItem="28v-Gv-gwD" firstAttribute="top" secondItem="D2A-sK-tzx" secondAttribute="bottom" constant="16" id="fUK-3e-xUh"/>
-                            <constraint firstItem="28v-Gv-gwD" firstAttribute="centerX" secondItem="geq-90-07C" secondAttribute="centerX" id="i5a-rY-vTZ"/>
-                            <constraint firstItem="geq-90-07C" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="lb4-tj-HB4"/>
+                            <constraint firstItem="D2A-sK-tzx" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="0vU-Tb-jlI"/>
+                            <constraint firstItem="fY9-In-yoF" firstAttribute="centerX" secondItem="D2A-sK-tzx" secondAttribute="centerX" constant="60" id="1Zf-Q6-291"/>
+                            <constraint firstItem="geq-90-07C" firstAttribute="centerX" secondItem="D2A-sK-tzx" secondAttribute="centerX" constant="-60" id="27C-U7-Mp3"/>
+                            <constraint firstItem="28v-Gv-gwD" firstAttribute="centerX" secondItem="D2A-sK-tzx" secondAttribute="centerX" constant="-60" id="4aP-Wj-EOS"/>
+                            <constraint firstItem="D2A-sK-tzx" firstAttribute="top" secondItem="geq-90-07C" secondAttribute="bottom" constant="16" id="AV6-8s-YAI"/>
+                            <constraint firstItem="D2A-sK-tzx" firstAttribute="top" secondItem="F8j-2X-SLG" secondAttribute="bottom" constant="16" id="KTs-hZ-5Hy"/>
+                            <constraint firstItem="F8j-2X-SLG" firstAttribute="centerX" secondItem="D2A-sK-tzx" secondAttribute="centerX" constant="60" id="RTm-PS-sKB"/>
+                            <constraint firstItem="D2A-sK-tzx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Z7s-SO-Tdc"/>
+                            <constraint firstItem="28v-Gv-gwD" firstAttribute="top" secondItem="D2A-sK-tzx" secondAttribute="bottom" constant="16" id="ZRl-md-hG6"/>
+                            <constraint firstItem="fY9-In-yoF" firstAttribute="top" secondItem="D2A-sK-tzx" secondAttribute="bottom" constant="16" id="hon-pI-GH8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
